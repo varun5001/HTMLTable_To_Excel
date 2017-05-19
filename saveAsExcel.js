@@ -4,7 +4,18 @@ function saveAsExcel(id, fileName)
             var table_text="<table border='2px'><tr>"; //Table Intialization, CSS included
             var textRange; 
 			var index=0; 
-			var table = document.getElementById(id); // Read table using id
+
+			// Use jQuery selector engine Sizzle when available
+			var jQuery = window.jQuery || 'undefined';
+			if(jQuery !== 'undefined'){
+				if(jQuery(id).length){
+					var table = jQuery(id)[0];					
+				}else{
+					var table = jQuery('#'+id)[0];
+				}
+			}else{
+				var table = document.getElementById(id); // Read table using id
+			}
 			/*
 				Read Table Data and append to table_text
 			*/
@@ -51,7 +62,15 @@ function saveAsExcel(id, fileName)
 				   var a = document.createElement('a');
 					//getting data from our div that contains the HTML table
 					var data_type = 'data:application/vnd.ms-excel';
-					var table_div = document.getElementById(id);
+					if(jQuery !== 'undefined'){
+						if(jQuery(id).length){
+							var table_div = jQuery(id)[0];					
+						}else{
+							var table_div = jQuery('#'+id)[0];
+						}
+					}else{
+						var table_div = document.getElementById(id); // Read table using id
+					}
 					var table_html = table_div.outerHTML.replace(/ /g, '%20');
 					table_html = table_html.replace(/<a[^>]*>|<\/a>/g, "");
 					a.href = data_type + ', ' + table_html;
